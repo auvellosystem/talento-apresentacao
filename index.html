@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Apresentação - Talento (Web)</title>
+  <style>
+
+    :root { color-scheme: dark; --bg:#0c0d10; --panel:#121317; --line:#282a31; --text:#f1f2f5; --muted:#a1a5b1; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--bg); color:var(--text); font-family:Inter,"Segoe UI",Arial,sans-serif; -webkit-font-smoothing:antialiased; }
+    .estrutura { display:flex; min-height:100vh; }
+    .lateral { width:292px; flex-shrink:0; padding:32px 18px 24px; background:#111216; border-right:1px solid var(--line); }
+    .marca { display:flex; align-items:center; gap:12px; margin:0 12px 22px; }
+    .simbolo { width:40px; height:40px; display:grid; place-items:center; border:1px solid #44464e; background:linear-gradient(145deg,#383a42,#1c1d23); border-radius:12px; font-size:16px; box-shadow:0 5px 16px #0004; }
+    .lateral h1 { font-size:19px; letter-spacing:-.6px; margin:0; }
+    .marca small { display:block; margin-top:5px; color:var(--muted); font-size:10px; text-transform:uppercase; letter-spacing:2px; }
+    .lateral p { font-size:13px; line-height:1.7; color:var(--muted); margin:0 12px 25px; }
+    .menu-label { margin:0 12px 12px; font-size:10px; color:#8f939f; text-transform:uppercase; letter-spacing:2px; }
+    .menu { display:grid; gap:5px; }
+    button { font:inherit; }
+    .menu button { display:flex; align-items:center; gap:12px; width:100%; padding:12px; border:1px solid transparent; border-radius:9px; background:transparent; color:#aaadba; font-size:13px; text-align:left; cursor:pointer; transition:background .18s,color .18s,border-color .18s; }
+    .menu button:hover { background:#1c1e24; color:#fff; }
+    .menu button[aria-current="true"] { color:white; background:linear-gradient(110deg,#30323a,#24262d); border-color:#474a55; box-shadow:inset 3px 0 0 #e4e6ec; }
+    .menu button[aria-current="true"]::after { content:'▶'; margin-left:auto; font-size:9px; color:#e2e4ec; }
+    .numero { font-size:10px; font-family:ui-monospace,monospace; color:#a1a5b1; border:1px solid #353741; border-radius:5px; padding:4px; min-width:25px; text-align:center; }
+    main { flex:1; min-width:0; padding:34px clamp(24px,4vw,64px) 50px; background:radial-gradient(ellipse at 80% 0%,#25273055,transparent 60%); }
+    .conteudo { max-width:1150px; margin:auto; }
+    .topbar { display:flex; align-items:center; justify-content:space-between; gap:12px; border-bottom:1px solid var(--line); padding-bottom:24px; margin-bottom:44px; font-size:12px; color:var(--muted); }
+    .topbar strong { color:#e3e5eb; font-weight:500; }
+    .badge { border:1px solid #353740; border-radius:20px; padding:7px 11px; font-size:10px; letter-spacing:1px; color:#c7cad3; white-space:nowrap; }
+    .etiqueta { color:#a6aab6; font-size:10px; letter-spacing:2px; font-weight:600; text-transform:uppercase; }
+    h2 { font-size:clamp(28px,3.5vw,43px); font-weight:600; margin:13px 0 12px; letter-spacing:-1.5px; }
+    .descricao { color:var(--muted); font-size:14px; line-height:1.7; margin:0 0 28px; }
+    .player-card { padding:9px; background:linear-gradient(145deg,#292b33,#17181e); border:1px solid #3a3c46; border-radius:19px; box-shadow:0 25px 70px #0005; }
+    .video { aspect-ratio:16/9; background:#08090b; border-radius:11px; overflow:hidden; }
+    iframe { width:100%; height:100%; border:0; display:block; }
+    .aviso { height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:25px; text-align:center; }
+    .aviso span { font-size:40px; color:#b9bdc8; margin-bottom:12px; }
+    .aviso p { color:var(--muted); line-height:1.6; }
+    .rodape-aula { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:18px; margin-top:24px; }
+    #contador { color:var(--muted); font-size:12px; font-family:ui-monospace,monospace; }
+    .navegacao { display:flex; gap:10px; }
+    .navegacao button { padding:12px 18px; border:1px solid #383b45; border-radius:9px; background:#1c1e25; color:#e4e6ed; font-size:12px; cursor:pointer; transition:background .18s; }
+    .navegacao #proxima { background:#e4e6ed; color:#17181e; border-color:#e4e6ed; font-weight:600; }
+    .navegacao button:hover:not(:disabled) { background:#363944; }
+    .navegacao #proxima:hover:not(:disabled) { background:#fff; }
+    .navegacao button:disabled { opacity:.3; cursor:default; }
+    .abrir { display:inline-block; margin-top:26px; color:#a1a5b1; font-size:12px; text-decoration:none; line-height:1.6; }
+    .abrir:hover { color:#fff; text-decoration:underline; }
+    .nota { margin-top:38px; padding-top:20px; border-top:1px solid var(--line); font-size:11px; color:#9599a6; }
+    button:focus-visible,a:focus-visible { outline:2px solid #e4e6ed; outline-offset:4px; }
+    [hidden] { display:none!important; }
+    @media(min-width:801px) { .lateral { position:sticky; top:0; height:100vh; overflow-y:auto; scrollbar-width:thin; scrollbar-color:#444650 #111216; } }
+    @media(max-width:800px) { .estrutura { flex-direction:column; } .lateral { width:100%; padding:23px 16px 18px; border-right:0; border-bottom:1px solid var(--line); } .marca { margin-bottom:15px; } .lateral p { margin-bottom:18px; } .menu { max-height:220px; overflow-y:auto; scrollbar-width:thin; } main { padding:24px 18px 36px; } .topbar { margin-bottom:28px; padding-bottom:18px; } .badge { font-size:9px; } .player-card { padding:5px; border-radius:13px; } .video { border-radius:8px; } .navegacao button { padding:11px 14px; } }
+    @media(prefers-reduced-motion:reduce) { * { transition:none!important; } }
+  </style>
+</head>
+<body>
+  <div class="estrutura">
+    <aside class="lateral">
+      <div class="marca"><span class="simbolo" aria-hidden="true">▶</span><div><h1>Video Apresentacao</h1><small>Central de apresentação</small></div></div>
+      <p>Selecione um assunto para assistir ao passo a passo.</p>
+      <div class="menu-label">Conteúdo das aulas</div>
+      <nav
+        id="menu"
+        class="menu"
+        aria-label="Lista de videoaulas"
+      ></nav>
+    </aside>
+    <main>
+      <div class="conteudo">
+        <div class="topbar"><span>Central de ajuda <span aria-hidden="true"> / </span> <strong>VideoApresentacao</strong></span><span class="badge">GUIA DO SISTEMA</span></div>
+        <div aria-live="polite">
+          <span class="etiqueta">Apresentação - Talento</span>
+          <h2 id="titulo">Página Inicial</h2>
+        </div>
+        <p class="descricao">
+          Escolha uma aula no menu e dê o play para assistir.
+        </p>
+        <div class="player-card"><div id="video" class="video"></div></div>
+        <div class="rodape-aula">
+          <span id="contador"></span>
+          <div class="navegacao">
+            <button id="anterior" type="button">
+              ← Anterior
+            </button>
+            <button id="proxima" type="button">
+              Próxima →
+            </button>
+          </div>
+        </div>
+        <a
+          id="abrir"
+          class="abrir"
+          target="_blank"
+          rel="noopener noreferrer"
+          hidden
+        >
+          Se o vídeo não carregar, abrir no Google Drive ↗
+        </a>
+        <p class="nota">Aprenda no seu ritmo. Selecione um assunto para começar.</p>
+        <noscript>
+          Ative o JavaScript para selecionar as videoaulas.
+        </noscript>
+      </div>
+    </main>
+  </div>
+  <script>
+    /*
+      COLOQUE OS LINKS DOS VÍDEOS AQUI.
+      Exemplo:
+      link: "https://drive.google.com/file/d/ID_DO_VIDEO/view"
+      Você também pode colocar somente o ID do arquivo.
+      Não remova as aspas nem as vírgulas entre as aulas.
+    */
+    const aulas = [
+      { titulo: "Página Inicial",       link: "https://drive.google.com/file/d/1w-p5hFlGevZoBu2b7-3HUpN8Rm2ZwhSM/view?usp=sharing" },
+      { titulo: "Visão Geral",          link: "https://drive.google.com/file/d/1DXBrgULD3I0Tx9kkZQe30v-OD_oM6WV3/view?usp=sharing" },
+      { titulo: "Configurações",        link: "https://drive.google.com/file/d/1Sm-xmFJlMURAzIpTCtPDotPfVXtti72h/view?usp=sharing" },
+      { titulo: "Lembrete",             link: "https://drive.google.com/file/d/103ebQ7p1nGl4V3UquiMagdvQyxSWpiC9/view?usp=sharing" },
+      { titulo: "Acervo",               link: "https://drive.google.com/file/d/1ARYQUKWLACF2RPfGkskOanuUm6z4CN7k/view?usp=sharing" },
+      { titulo: "Evento",               link: "https://drive.google.com/file/d/1eGh9oNqjDDhacF_4f68d8-YJp69glfO5/view?usp=sharing" },
+      { titulo: "Clientes",             link: "https://drive.google.com/file/d/1hRyKYKizcq_mPlhKVumAMpoT-Bn1gjrC/view?usp=sharing" },
+      { titulo: "Locação",              link: "https://drive.google.com/file/d/1nbyNGBmt2GT4vybconGhRfplXl-IHfVO/view?usp=sharing" },
+      { titulo: "Ajuste",               link: "https://drive.google.com/file/d/1gZ74VygMClnGz5eHImTYVRd5HidrniJ1/view?usp=sharing" },
+      { titulo: "Devolução",            link: "https://drive.google.com/file/d/1phpmCori8h8CpYU-WhUZ5-rVFj-DLFZa/view?usp=sharing" },
+      { titulo: "Considerações Finais", link: "https://drive.google.com/file/d/1TOiuzr1BXSZsijCyJIX6mJStWFUiUcUU/view?usp=sharing" },
+      { titulo: "Hospedagem",           link: "https://drive.google.com/file/d/1Ol5FymC0YUNaNX3taxG8XTNrWJDhvKFw/view?usp=sharing" },
+      { titulo: "Extra",                link: "https://drive.google.com/file/d/1AGporQpnoEIP5oDFkv4zt7_l5SjKCzxe/view?usp=drive_link" }
+    ];
+    const menu = document.getElementById("menu");
+    const titulo = document.getElementById("titulo");
+    const video = document.getElementById("video");
+    const contador = document.getElementById("contador");
+    const anterior = document.getElementById("anterior");
+    const proxima = document.getElementById("proxima");
+    const abrir = document.getElementById("abrir");
+    let aulaAtual = 0;
+    // Extrai o ID de links comuns do Google Drive.
+    function obterIdDrive(valor) {
+      const texto = valor.trim();
+      if (!texto) return null;
+      // Aceita o ID sem o link completo.
+      if (/^[a-zA-Z0-9_-]+$/.test(texto)) {
+        return texto;
+      }
+      try {
+        const url = new URL(texto);
+        if (
+          url.protocol !== "https:" ||
+          url.hostname !== "drive.google.com"
+        ) {
+          return null;
+        }
+        const caminho = url.pathname.match(/\/file\/d\/([^/]+)/);
+        const id = caminho ? caminho[1] : url.searchParams.get("id");
+        return id && /^[a-zA-Z0-9_-]+$/.test(id) ? id : null;
+      } catch {
+        return null;
+      }
+    }
+    function mostrarAviso(mensagem) {
+      const aviso = document.createElement("div");
+      aviso.className = "aviso";
+      const icone = document.createElement("span");
+      icone.textContent = "▶";
+      icone.setAttribute("aria-hidden", "true");
+      const texto = document.createElement("p");
+      texto.textContent = mensagem;
+      aviso.append(icone, texto);
+      video.replaceChildren(aviso);
+    }
+    // Cria os títulos do menu na ordem da lista.
+    const botoes = aulas.map((aula, indice) => {
+      const botao = document.createElement("button");
+      botao.type = "button";
+      const numero = document.createElement("span");
+      numero.className = "numero";
+      numero.textContent = String(indice + 1).padStart(2, "0");
+      const nome = document.createElement("span");
+      nome.textContent = aula.titulo;
+      botao.append(numero, nome);
+      botao.addEventListener("click", () => selecionarAula(indice));
+      menu.appendChild(botao);
+      return botao;
+    });
+    function selecionarAula(indice) {
+      if (indice < 0 || indice >= aulas.length) return;
+      aulaAtual = indice;
+      const aula = aulas[indice];
+      const id = obterIdDrive(aula.link);
+      titulo.textContent = aula.titulo;
+      contador.textContent = `Aula ${indice + 1} de ${aulas.length}`;
+      botoes.forEach((botao, posicao) => {
+        botao.setAttribute(
+          "aria-current",
+          String(posicao === indice)
+        );
+      });
+      // Remove o player anterior para interromper o vídeo.
+      video.replaceChildren();
+      abrir.hidden = true;
+      abrir.removeAttribute("href");
+      if (id) {
+        const player = document.createElement("iframe");
+        player.src =
+          `https://drive.google.com/file/d/${id}/preview`;
+        player.title = `Videoaula: ${aula.titulo}`;
+        player.allow = "fullscreen";
+        player.allowFullscreen = true;
+        video.appendChild(player);
+        abrir.href =
+          `https://drive.google.com/file/d/${id}/view`;
+        abrir.hidden = false;
+      } else {
+        mostrarAviso(
+          aula.link.trim()
+            ? "Link inválido. Confira o endereço do Google Drive."
+            : "O vídeo desta aula ainda não foi adicionado."
+        );
+      }
+      anterior.disabled = indice === 0;
+      proxima.disabled = indice === aulas.length - 1;
+    }
+    anterior.addEventListener("click", () => {
+      selecionarAula(aulaAtual - 1);
+    });
+    proxima.addEventListener("click", () => {
+      selecionarAula(aulaAtual + 1);
+    });
+    selecionarAula(0);
+  </script>
+</body>
+</html>
